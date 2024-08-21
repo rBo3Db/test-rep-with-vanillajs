@@ -1,20 +1,25 @@
 // Пример с использованием async/await
-document.getElementById("asyncBtn").addEventListener("click", async () => {
+// Именованная async функция
+async function fetchData() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts/1");
+  if (!response.ok) {
+    throw new Error("Ошибка сети");
+  }
+  return response.json();
+}
+
+// Использование именованной функции с .then()
+document.getElementById("asyncBtn").addEventListener("click", () => {
   const asyncResult = document.getElementById("asyncResult");
   asyncResult.textContent = "Загрузка...";
 
-  try {
-    const response = await fetch(
-      "https://jsonplaceholder.typicode.com/posts/1"
-    );
-    if (!response.ok) {
-      throw new Error("Ошибка сети");
-    }
-    const data = await response.json();
-    asyncResult.textContent = JSON.stringify(data, null, 2);
-  } catch (error) {
-    asyncResult.textContent = `Ошибка: ${error.message}`;
-  }
+  fetchData()
+    .then((data) => {
+      asyncResult.textContent = JSON.stringify(data, null, 2);
+    })
+    .catch((error) => {
+      asyncResult.textContent = `Ошибка: ${error.message}`;
+    });
 });
 
 // Пример с использованием промисов
